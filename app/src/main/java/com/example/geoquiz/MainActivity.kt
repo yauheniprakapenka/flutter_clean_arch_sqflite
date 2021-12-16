@@ -46,6 +46,12 @@ class MainActivity : AppCompatActivity() {
             updateQuestion()
         }
 
+        // Упражнение. Добавление слушателя для TextView
+        questionTextView.setOnClickListener { view: View ->
+            currentIndex += 1
+            updateQuestion()
+        }
+
         updateQuestion()
     }
 
