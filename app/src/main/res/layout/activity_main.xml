@@ -37,24 +37,22 @@
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:showDividers="middle"
         android:orientation="horizontal" >
 
         <Button
             android:id="@+id/previous_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:drawableStart="@drawable/arrow_left"
+            android:drawableLeft="@drawable/arrow_left"
             android:drawablePadding="4dp"
             android:text="@string/previous_button" />
 
-        <Button
+        <ImageButton
             android:id="@+id/next_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:drawableEnd="@drawable/arrow_right"
-            android:drawablePadding="4dp"
-            android:text="@string/next_button" />
+            android:src="@drawable/arrow_right"
+            android:contentDescription="Next button" />
     </LinearLayout>
 
 </LinearLayout>
