@@ -41,19 +41,17 @@
             android:id="@+id/previous_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="bottom|right"
             android:drawableLeft="@drawable/arrow_left"
-            android:drawablePadding="4dp"
+            android:layout_marginEnd="4dp"
             android:text="@string/previous_button" />
 
-        <ImageButton
+        <Button
             android:id="@+id/next_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="bottom|right"
-            android:src="@drawable/arrow_right"
-            android:drawablePadding="4dp"
-            android:contentDescription="@string/next_button" />
+            android:drawableRight="@drawable/arrow_right"
+            android:layout_marginStart="4dp"
+            android:text="@string/next_button" />
     </LinearLayout>
 
 </FrameLayout>
