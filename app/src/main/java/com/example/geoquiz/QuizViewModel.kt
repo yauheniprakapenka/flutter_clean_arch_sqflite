@@ -17,6 +17,10 @@ class QuizViewModel : ViewModel() {
     var currentIndex = 0
     private var selectedAnswer: Boolean? = null
 
+    fun getCurrentQuestionAnswer(): Boolean {
+        return questionBank[currentIndex].answer
+    }
+
     fun getResult(): Int {
         val totalQuestions = questionBank.count()
         val correctAnswers = countCorrectAnswers(questionBank)
