@@ -10,6 +10,7 @@ import android.widget.Toast
 import androidx.lifecycle.ViewModelProviders
 
 private const val TAG = "MainActivity"
+private const val KEY_INDEX = "index"
 
 class MainActivity : AppCompatActivity() {
     private lateinit var trueButton: Button
@@ -22,28 +23,12 @@ class MainActivity : AppCompatActivity() {
         ViewModelProviders.of(this).get(QuizViewModel::class.java)
     }
 
-    private fun showResult() {
-        val correctAnswersPerPercent = quizViewModel.getResult()
-        Toast.makeText(this, "Правильных ответов: $correctAnswersPerPercent%", Toast.LENGTH_SHORT)
-            .show()
-    }
-
-    private fun updateQuestion() {
-        val questionTextResId = quizViewModel.getResourceId()
-        val questionString = resources.getString(
-            resources.getIdentifier(
-                questionTextResId.toString(),
-                "string",
-                packageName
-            )
-        )
-        questionTextView.text = questionString
-    }
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         findViewsById()
+        setCurrentIndex(savedInstanceState)
+
         trueButton.setOnClickListener { view: View ->
             quizViewModel.onTrueButtonClicked()
         }
@@ -69,11 +54,50 @@ class MainActivity : AppCompatActivity() {
         updateQuestion()
     }
 
+    override fun onPause() {
+        super.onPause()
+
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        Log.i(TAG, "on destroy")
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        Log.i(TAG, "On save instance state")
+        outState.putInt(KEY_INDEX, quizViewModel.currentIndex)
+    }
+
     private fun findViewsById() {
         trueButton = findViewById(R.id.true_button)
         falseButton = findViewById(R.id.false_button)
         nextButton = findViewById(R.id.next_button)
         previousButton = findViewById(R.id.previous_button)
         questionTextView = findViewById(R.id.question_text_view)
+    }
+
+    private fun showResult() {
+        val correctAnswersPerPercent = quizViewModel.getResult()
+        Toast.makeText(this, "Правильных ответов: $correctAnswersPerPercent%", Toast.LENGTH_SHORT)
+            .show()
+    }
+
+    private fun updateQuestion() {
+        val questionTextResId = quizViewModel.getResourceId()
+        val questionString = resources.getString(
+            resources.getIdentifier(
+                questionTextResId.toString(),
+                "string",
+                packageName
+            )
+        )
+        questionTextView.text = questionString
+    }
+
+    private fun setCurrentIndex(savedInstanceState: Bundle?) {
+        val currentIndex = savedInstanceState?.getInt(KEY_INDEX, 0) ?: 0
+        quizViewModel.currentIndex = currentIndex
     }
 }
