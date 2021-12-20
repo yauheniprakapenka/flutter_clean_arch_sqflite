@@ -38,23 +38,34 @@
 
     <LinearLayout
         android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+    <Button
+        android:id="@+id/cheat_button"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="horizontal" >
+        android:layout_marginTop="24dp"
+        android:text="@string/cheat_button" />
+</LinearLayout>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
 
         <Button
             android:id="@+id/previous_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:drawableLeft="@drawable/arrow_left"
             android:layout_marginEnd="4dp"
+            android:drawableLeft="@drawable/arrow_left"
             android:text="@string/previous_button" />
 
         <Button
             android:id="@+id/next_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:drawableRight="@drawable/arrow_right"
             android:layout_marginStart="4dp"
+            android:drawableRight="@drawable/arrow_right"
             android:text="@string/next_button" />
     </LinearLayout>
 
