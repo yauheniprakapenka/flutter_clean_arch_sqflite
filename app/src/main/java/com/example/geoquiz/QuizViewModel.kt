@@ -6,9 +6,23 @@ import androidx.lifecycle.ViewModel
 private const val TAG = "QuizViewModel"
 
 class QuizViewModel : ViewModel() {
-
     var currentIndex = 0
     var isCheater = false
+    private var hintCount = 2
+
+    fun decreaseHintCount() {
+        if (hintCount > 0) {
+            hintCount--
+        }
+    }
+
+    fun isHintRemain(): Boolean {
+        return hintCount > 0
+    }
+
+    fun getHintCountText(): String {
+        return "Попыток осталось: $hintCount"
+    }
 
     private val questionBank = listOf(
         Question(R.string.question_australia, true),

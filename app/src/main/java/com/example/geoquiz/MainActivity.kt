@@ -13,6 +13,7 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
+import org.w3c.dom.Text
 
 private const val TAG = "MainActivity"
 private const val KEY_INDEX = "index"
@@ -25,6 +26,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var apiVersionButton: Button
     private lateinit var cheatButton: Button
     private lateinit var questionTextView: TextView
+    private lateinit var hintRemainTextView: TextView
 
     private val quizViewModel: QuizViewModel by lazy {
         ViewModelProviders.of(this).get(QuizViewModel::class.java)
@@ -45,6 +47,7 @@ class MainActivity : AppCompatActivity() {
         cheatButton = findViewById(R.id.cheat_button)
         questionTextView = findViewById(R.id.question_text_view)
         apiVersionButton = findViewById(R.id.api_version_button)
+        hintRemainTextView = findViewById(R.id.hint_remain)
 
         apiVersionButton.setOnClickListener {
             val intent = ApiVersionActivity.newIntent(this@MainActivity)
@@ -69,17 +72,10 @@ class MainActivity : AppCompatActivity() {
             val answerIsTrue = quizViewModel.currentQuestionAnswer
             val intent = CheatActivity.newIntent(this@MainActivity, answerIsTrue)
             startActivityForResult(intent, REQUEST_CODE_CHEAT)
-
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                val options =
-                    ActivityOptions.makeClipRevealAnimation(view, 0, 0, view.width, view.height)
-                startActivityForResult(intent, REQUEST_CODE_CHEAT, options.toBundle())
-            } else {
-                startActivityForResult(intent, REQUEST_CODE_CHEAT)
-            }
         }
 
         updateQuestion()
+        updateHintRemain()
     }
 
     override fun onActivityResult(
@@ -94,14 +90,16 @@ class MainActivity : AppCompatActivity() {
         }
 
         if (requestCode == REQUEST_CODE_CHEAT) {
-            quizViewModel.isCheater =
-                data?.getBooleanExtra(EXTRA_ANSWER_SHOWN, false) ?: false
+            if (data?.getBooleanExtra(EXTRA_ANSWER_SHOWN, false) == true) {
+                quizViewModel.decreaseHintCount()
+                updateHintRemain()
+                disableCheatButtonIfNeeded()
+            }
         }
     }
 
     override fun onSaveInstanceState(savedInstanceState: Bundle) {
         super.onSaveInstanceState(savedInstanceState)
-        Log.i(TAG, "onSaveInstanceState")
         savedInstanceState.putInt(KEY_INDEX, quizViewModel.currentIndex)
     }
 
@@ -119,5 +117,13 @@ class MainActivity : AppCompatActivity() {
         }
         Toast.makeText(this, messageResId, Toast.LENGTH_SHORT)
             .show()
+    }
+
+    private fun updateHintRemain() {
+        hintRemainTextView.text = quizViewModel.getHintCountText()
+    }
+
+    private fun disableCheatButtonIfNeeded() {
+        cheatButton.isEnabled = quizViewModel.isHintRemain()
     }
 }
