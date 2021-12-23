@@ -1,6 +1,8 @@
 package com.example.criminal
 
+import android.text.format.DateFormat
 import androidx.lifecycle.ViewModel
+import java.util.*
 
 class CrimeListViewModel: ViewModel() {
     val crimes = mutableListOf<Crime>()
@@ -15,8 +17,15 @@ class CrimeListViewModel: ViewModel() {
             val crime = Crime()
             crime.title = "Crime #$i"
             crime.isSolved = i % 2 == 0
+            crime.date = Date(1563781647000)
             crimes += crime
         }
         return crimes
+    }
+
+    fun getFormattedDate(date: Long): String {
+        // Solution: https://www.geeksforgeeks.org/date-and-time-formatting-in-android/
+        val format = "EEEE, LLL dd, yyyy"
+        return DateFormat.format(format, date).toString()
     }
 }
