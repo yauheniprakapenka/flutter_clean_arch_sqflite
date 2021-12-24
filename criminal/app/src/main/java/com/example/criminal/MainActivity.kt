@@ -11,18 +11,7 @@ class MainActivity : AppCompatActivity(), CrimeListFragment.Callbacks {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-
         addCrimeFragment()
-    }
-
-    override fun onCrimeSelected(crimeId: UUID) {
-        Log.d(TAG, "Mainactivity.onCrimeSelected: $crimeId")
-        val fragment = CrimeFragment()
-        supportFragmentManager
-            .beginTransaction()
-            .replace(R.id.fragment_container, fragment)
-            .addToBackStack(null)
-            .commit()
     }
 
     private fun addCrimeFragment() {
@@ -34,5 +23,15 @@ class MainActivity : AppCompatActivity(), CrimeListFragment.Callbacks {
                 .add(R.id.fragment_container, fragment)
                 .commit()
         }
+    }
+
+    override fun onCrimeSelected(crimeId: UUID) {
+//        Log.d(TAG, "Mainactivity.onCrimeSelected: $crimeId")
+        val fragment = CrimeFragment.newInstance(crimeId)
+        supportFragmentManager
+            .beginTransaction()
+            .replace(R.id.fragment_container, fragment)
+            .addToBackStack(null)
+            .commit()
     }
 }
