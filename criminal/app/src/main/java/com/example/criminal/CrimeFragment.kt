@@ -67,6 +67,11 @@ class CrimeFragment : Fragment() {
         }
     }
 
+    override fun onStop() {
+        super.onStop()
+        crimeDetailViewModel.saveCrime(crime)
+    }
+
     companion object {
         fun newInstance(crimeId: UUID): CrimeFragment {
             val args = Bundle().apply {
@@ -86,7 +91,6 @@ class CrimeFragment : Fragment() {
                 count: Int,
                 after: Int
             ) {
-                print("beforeTextChanged")
             }
 
             override fun onTextChanged(
@@ -99,7 +103,7 @@ class CrimeFragment : Fragment() {
             }
 
             override fun afterTextChanged(s: Editable?) {
-                print("afterTextChanged")
+                crime.title = s.toString()
             }
 
         }
