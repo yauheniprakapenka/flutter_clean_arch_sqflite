@@ -1,8 +1,9 @@
 package com.example.criminal
 
+import android.content.Intent
 import android.os.Bundle
 import android.text.*
-import android.util.Log
+import android.text.format.DateFormat
 import android.view.*
 import android.widget.*
 import androidx.fragment.app.Fragment
@@ -13,6 +14,7 @@ private const val ARG_CRIME_ID = "crime_id"
 private const val TAG = "CrimeFragment"
 private const val DIALOG_DATE = "DialogDate"
 private const val REQUEST_DATE = 0
+private const val DATE_FORMAT = "EEE, MMM, dd"
 
 class CrimeFragment : Fragment(), DatePickerFragment.Callbacks {
     private var crime = Crime()
@@ -20,6 +22,7 @@ class CrimeFragment : Fragment(), DatePickerFragment.Callbacks {
     private lateinit var dateButton: Button
     private lateinit var timeButton: Button
     private lateinit var solvedCheckBox: CheckBox
+    private lateinit var reportButton: Button
     private val crimeDetailViewModel: CrimeDetailViewModel by lazy {
         ViewModelProviders.of(this).get(CrimeDetailViewModel::class.java)
     }
@@ -40,6 +43,7 @@ class CrimeFragment : Fragment(), DatePickerFragment.Callbacks {
         dateButton = view.findViewById(R.id.crime_date_button) as Button
         timeButton = view.findViewById(R.id.crime_time_button) as Button
         solvedCheckBox = view.findViewById(R.id.crime_solved) as CheckBox
+        reportButton = view.findViewById(R.id.crime_report) as Button
         return view
     }
 
@@ -73,6 +77,16 @@ class CrimeFragment : Fragment(), DatePickerFragment.Callbacks {
                 show(this@CrimeFragment.parentFragmentManager, DIALOG_DATE)
             }
 
+        }
+
+        reportButton.setOnClickListener {
+            Intent(Intent.ACTION_SEND).apply {
+                type = "text/plain"
+                putExtra(Intent.EXTRA_TEXT, getCrimeReport())
+                putExtra(Intent.EXTRA_SUBJECT, getString(R.string.crime_report_suspect))
+            }.also { intent ->
+                startActivity(intent)
+            }
         }
 
         timeButton.setOnClickListener {
@@ -133,6 +147,24 @@ class CrimeFragment : Fragment(), DatePickerFragment.Callbacks {
             isChecked = crime.isSolved
             jumpDrawablesToCurrentState()
         }
+    }
+
+    private fun getCrimeReport(): String {
+        val solvedString = if (crime.isSolved) {
+            getString(R.string.crime_report_solved)
+        } else {
+            getString(R.string.crime_report_unsolved)
+        }
+
+        val dateString = DateFormat.format(DATE_FORMAT, crime.date).toString()
+
+        val suspect = if (crime.suspect.isBlank()) {
+            getString(R.string.crime_report_no_suspect)
+        } else {
+            getString(R.string.crime_report_suspect)
+        }
+
+        return getString(R.string.crime_report, crime.title, dateString, solvedString, suspect)
     }
 
     override fun onDateSelected(date: Date) {
