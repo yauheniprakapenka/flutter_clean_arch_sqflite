@@ -14,26 +14,13 @@ class UsersPage extends StatefulWidget {
 }
 
 class _UsersPageState extends State<UsersPage> {
+  final TextEditingController _textFieldController = TextEditingController();
+
   @override
   void initState() {
     super.initState();
     BlocProvider.of<UserBloc>(context, listen: false).add(const GetUsers());
   }
-
-  // Update an existing journal
-  // Future<void> _updateItem(int id) async {
-  //   await SQFLiteLocalDataSource.updateItem(id, _titleController.text, _descriptionController.text);
-  //   _refreshJournals();
-  // }
-
-  // Delete an item
-  // void _deleteItem(int id) async {
-  //   await SQFLiteLocalDataSource.deleteItem(id);
-  //   ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-  //     content: Text('Successfully deleted a journal!'),
-  //   ));
-  //   _refreshJournals();
-  // }
 
   @override
   Widget build(BuildContext context) {
@@ -64,14 +51,39 @@ class _UsersPageState extends State<UsersPage> {
         },
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: _onAddUserPressed,
+        onPressed: () => _onAddUserPressed(context),
         child: const Icon(Icons.add),
       ),
     );
   }
 
-  void _onAddUserPressed() {
-    const User user = User(firstName: 'ddJack');
-    BlocProvider.of<UserBloc>(context, listen: false).add(const AddUser(user: user));
+  Future<void> _onAddUserPressed(BuildContext context) async {
+    return showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('What is your name?'),
+          content: TextField(
+            controller: _textFieldController,
+          ),
+          actions: <Widget>[
+            TextButton(
+              child: const Text('Cancel'),
+              onPressed: () => Navigator.of(context).pop(),
+            ),
+            TextButton(
+              child: const Text('Submit'),
+              onPressed: () {
+                final String userFirstName = _textFieldController.text;
+                final User user = User(firstName: userFirstName);
+                BlocProvider.of<UserBloc>(context, listen: false).add(AddUser(user: user));
+                Navigator.of(context).pop();
+                _textFieldController.clear();
+              },
+            ),
+          ],
+        );
+      },
+    );
   }
 }
