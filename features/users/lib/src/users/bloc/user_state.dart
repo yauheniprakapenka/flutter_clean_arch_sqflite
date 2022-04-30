@@ -8,10 +8,10 @@ class UserIsLoading implements UserState {
   const UserIsLoading();
 }
 
-class UserData implements UserState {
+class UsersData implements UserState {
   final List<User> users;
 
-  const UserData({
+  const UsersData({
     required this.users,
   });
 }

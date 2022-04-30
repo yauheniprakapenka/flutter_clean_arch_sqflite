@@ -111,7 +111,7 @@ linter:
     - unrelated_type_equality_checks
     - unsafe_html
     - use_build_context_synchronously
-    # - use_key_in_widget_constructors
+    - use_key_in_widget_constructors
     - valid_regexps
     - always_declare_return_types
     # - always_put_control_body_on_new_line

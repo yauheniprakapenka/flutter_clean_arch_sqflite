@@ -2,9 +2,7 @@ import 'package:data/data.dart';
 import 'package:domain/domain.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-
-import '../../user/users/bloc/user_bloc.dart';
-import '../../user/users/pages/users_page.dart';
+import 'package:users/users.dart';
 
 class UserApp extends StatelessWidget {
   const UserApp();
@@ -15,8 +13,10 @@ class UserApp extends StatelessWidget {
       providers: <BlocProvider<dynamic>>[
         BlocProvider<UserBloc>(
           create: (_) => UserBloc(
-              addUserUseCase: serviceLocator.get<AddUserUseCase>(),
-              getUsersUseCase: serviceLocator.get<GetUsersUseCase>()),
+            addUserUseCase: serviceLocator.get<AddUserUseCase>(),
+            getUsersUseCase: serviceLocator.get<GetUsersUseCase>(),
+            deleteUseByIdUseCase: serviceLocator.get<DeleteUseByIdUseCase>(),
+          ),
         )
       ],
       child: const _MaterialUserApp(),

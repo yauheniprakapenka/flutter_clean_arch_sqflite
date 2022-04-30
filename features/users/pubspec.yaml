@@ -1,0 +1,16 @@
+name: users
+publish_to: 'none'
+
+environment:
+  sdk: ">=2.16.2 <3.0.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+  domain:
+    path: ../../domain  
+  userapp:
+    path: ../../
+
+flutter:
+  uses-material-design: true

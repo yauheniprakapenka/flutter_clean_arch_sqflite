@@ -21,6 +21,9 @@ class DataDI {
       )
       ..registerSingleton<GetUsersUseCase>(
         GetUsersUseCase(userRepository: serviceLocator.get<UserRepository>()),
+      )
+      ..registerSingleton<DeleteUseByIdUseCase>(
+        DeleteUseByIdUseCase(userRepository: serviceLocator.get<UserRepository>()),
       );
   }
 }

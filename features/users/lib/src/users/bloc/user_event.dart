@@ -13,3 +13,9 @@ class AddUser implements UserEvent {
 class GetUsers implements UserEvent {
   const GetUsers();
 }
+
+class DeleteUserById implements UserEvent {
+  final int id;
+
+  const DeleteUserById({required this.id});
+}

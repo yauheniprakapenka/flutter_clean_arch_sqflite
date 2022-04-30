@@ -28,4 +28,13 @@ class UserRepositoryImpl implements UserRepository {
       return <User>[];
     }
   }
+
+  @override
+  Future<void> deleteUserByID({required int userId}) async {
+    try {
+      await _userLocalDataSource.deleteUserByID(userId: userId);
+    } on Exception catch (e) {
+      log(e.toString());
+    }
+  }
 }

@@ -2,9 +2,9 @@ import 'package:domain/domain.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../bloc/user_bloc.dart';
-import '../bloc/user_event.dart';
-import '../bloc/user_state.dart';
+import 'bloc/user_bloc.dart';
+import 'bloc/user_event.dart';
+import 'bloc/user_state.dart';
 
 class UsersPage extends StatefulWidget {
   const UsersPage();
@@ -40,14 +40,21 @@ class _UsersPageState extends State<UsersPage> {
     return Scaffold(
       body: BlocBuilder<UserBloc, UserState>(
         builder: (BuildContext _, UserState state) {
-          if (state is UserData) {
+          if (state is UsersData) {
             final List<User> users = state.users;
             if (users.isEmpty) return const Center(child: Text('No users'));
             return Center(
               child: Column(
                 children: <Widget>[
                   ...users.map((User user) {
-                    return Text(user.firstName);
+                    return GestureDetector(
+                      onTap: () {
+                        BlocProvider.of<UserBloc>(context, listen: false).add(DeleteUserById(id: user.id!));
+                      },
+                      child: Text(
+                        user.firstName,
+                      ),
+                    );
                   }).toList(),
                 ],
               ),
@@ -64,7 +71,7 @@ class _UsersPageState extends State<UsersPage> {
   }
 
   void _onAddUserPressed() {
-    const User user = User(firstName: 'Jack');
+    const User user = User(firstName: 'ddJack');
     BlocProvider.of<UserBloc>(context, listen: false).add(const AddUser(user: user));
   }
 }

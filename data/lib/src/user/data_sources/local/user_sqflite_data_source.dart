@@ -1,7 +1,7 @@
 import 'package:domain/domain.dart';
-import 'package:flutter/foundation.dart';
 import 'package:sqflite/sqflite.dart';
 
+import '../../mappers/user_mapper.dart';
 import 'user_local_data_source.dart';
 
 class UserSqfliteDataSource implements UserLocalDataSource {
@@ -21,9 +21,13 @@ class UserSqfliteDataSource implements UserLocalDataSource {
   Future<List<User>> getUsers() async {
     final Database dataBase = await _openDataBase();
     final List<Map<String, dynamic>> usersMap = await dataBase.query(_usersTable, orderBy: _orderById);
-    return usersMap.map((Map<String, dynamic> user) {
-      return User(firstName: user[_userFirstNameValue]);
-    }).toList();
+    return usersMap.map(UserMapper.fromJson).toList();
+  }
+
+  @override
+  Future<void> deleteUserByID({required int userId}) async {
+    final Database dataBase = await _openDataBase();
+    await dataBase.delete(_usersTable, where: 'id = ?', whereArgs: <int>[userId]);
   }
 
 // id: the id of a item
@@ -56,7 +60,7 @@ class UserSqfliteDataSource implements UserLocalDataSource {
   // The app doesn't use this method but I put here in case you want to see it
   Future<List<Map<String, dynamic>>> getItem(int id) async {
     final Database db = await _openDataBase();
-    return db.query('items', where: "id = ?", whereArgs: [id], limit: 1);
+    return db.query('items', where: 'id = ?', whereArgs: [id], limit: 1);
   }
 
   // Update an item by id
@@ -69,16 +73,7 @@ class UserSqfliteDataSource implements UserLocalDataSource {
       'createdAt': DateTime.now().toString()
     };
 
-    final int result = await db.update('items', data, where: "id = ?", whereArgs: [id]);
+    final int result = await db.update('items', data, where: 'id = ?', whereArgs: [id]);
     return result;
-  }
-
-  Future<void> deleteItem(int id) async {
-    final Database db = await _openDataBase();
-    try {
-      await db.delete("items", where: "id = ?", whereArgs: [id]);
-    } catch (err) {
-      debugPrint("Something went wrong when deleting an item: $err");
-    }
   }
 }

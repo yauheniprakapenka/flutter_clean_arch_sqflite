@@ -1,5 +1,6 @@
 name: userapp
 publish_to: 'none'
+version: 1.0.0
 
 environment:
   sdk: ">=2.16.2 <3.0.0"
@@ -11,6 +12,8 @@ dependencies:
     path: data
   domain:
     path: domain
+  users:
+    path: features/users  
   flutter_bloc: ^8.0.1 
 
 dev_dependencies:
