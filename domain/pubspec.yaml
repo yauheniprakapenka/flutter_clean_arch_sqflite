@@ -1,0 +1,6 @@
+name: domain
+publish_to: 'none'
+
+environment:
+  sdk: ">=2.16.2 <3.0.0"
+ 
