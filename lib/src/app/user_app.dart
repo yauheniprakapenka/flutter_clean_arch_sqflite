@@ -13,11 +13,12 @@ class UserApp extends StatelessWidget {
       providers: <BlocProvider<dynamic>>[
         BlocProvider<UserBloc>(
           create: (_) => UserBloc(
-            addUserUseCase: serviceLocator.get<AddUserUseCase>(),
+            createUserUseCase: serviceLocator.get<CreateUserUseCase>(),
             getUsersUseCase: serviceLocator.get<GetUsersUseCase>(),
             deleteUseByIdUseCase: serviceLocator.get<DeleteUseByIdUseCase>(),
+            updateUserUseCase: serviceLocator.get<UpdateUserUseCase>(),
           ),
-        )
+        ),
       ],
       child: const _MaterialUserApp(),
     );
@@ -25,7 +26,7 @@ class UserApp extends StatelessWidget {
 }
 
 class _MaterialUserApp extends StatelessWidget {
-  const _MaterialUserApp({Key? key}) : super(key: key);
+  const _MaterialUserApp();
 
   @override
   Widget build(BuildContext context) {

@@ -37,4 +37,13 @@ class UserRepositoryImpl implements UserRepository {
       log(e.toString());
     }
   }
+
+  @override
+  Future<void> updateUser({required User user}) async {
+    try {
+      await _userLocalDataSource.updateUser(user: user);
+    } on Exception catch (e) {
+      log(e.toString());
+    }
+  }
 }

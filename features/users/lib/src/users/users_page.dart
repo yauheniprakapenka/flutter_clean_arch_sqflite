@@ -5,6 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'bloc/user_bloc.dart';
 import 'bloc/user_event.dart';
 import 'bloc/user_state.dart';
+import 'widgets/user_card.dart';
 
 class UsersPage extends StatefulWidget {
   const UsersPage();
@@ -34,13 +35,11 @@ class _UsersPageState extends State<UsersPage> {
               child: Column(
                 children: <Widget>[
                   ...users.map((User user) {
-                    return GestureDetector(
-                      onTap: () {
-                        BlocProvider.of<UserBloc>(context, listen: false).add(DeleteUserById(id: user.id!));
-                      },
-                      child: Text(
-                        user.firstName,
-                      ),
+                    return UserCard(
+                      user: user,
+                      onDeletePressed: () =>
+                          BlocProvider.of<UserBloc>(context, listen: false).add(DeleteUserById(id: user.id!)),
+                      onEditPressed: () => _onAddUserPressed(context: context, user: user),
                     );
                   }).toList(),
                 ],
@@ -51,13 +50,14 @@ class _UsersPageState extends State<UsersPage> {
         },
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () => _onAddUserPressed(context),
+        onPressed: () => _onAddUserPressed(context: context),
         child: const Icon(Icons.add),
       ),
     );
   }
 
-  Future<void> _onAddUserPressed(BuildContext context) async {
+  Future<void> _onAddUserPressed({required BuildContext context, User? user}) async {
+    if (user != null) _textFieldController.text = user.firstName;
     return showDialog(
       context: context,
       builder: (BuildContext context) {
@@ -75,8 +75,10 @@ class _UsersPageState extends State<UsersPage> {
               child: const Text('Submit'),
               onPressed: () {
                 final String userFirstName = _textFieldController.text;
-                final User user = User(firstName: userFirstName);
-                BlocProvider.of<UserBloc>(context, listen: false).add(AddUser(user: user));
+                final User editedUser = User(firstName: userFirstName, id: user?.id);
+                user == null
+                    ? BlocProvider.of<UserBloc>(context, listen: false).add(CreateUser(user: editedUser))
+                    : BlocProvider.of<UserBloc>(context, listen: false).add(UpdateUser(user: editedUser));
                 Navigator.of(context).pop();
                 _textFieldController.clear();
               },

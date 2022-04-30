@@ -16,14 +16,17 @@ class DataDI {
       ..registerSingleton<UserRepository>(
         UserRepositoryImpl(userLocalDataSource: serviceLocator.get<UserLocalDataSource>()),
       )
-      ..registerSingleton<AddUserUseCase>(
-        AddUserUseCase(userRepository: serviceLocator.get<UserRepository>()),
+      ..registerSingleton<CreateUserUseCase>(
+        CreateUserUseCase(userRepository: serviceLocator.get<UserRepository>()),
       )
       ..registerSingleton<GetUsersUseCase>(
         GetUsersUseCase(userRepository: serviceLocator.get<UserRepository>()),
       )
       ..registerSingleton<DeleteUseByIdUseCase>(
         DeleteUseByIdUseCase(userRepository: serviceLocator.get<UserRepository>()),
+      )
+      ..registerSingleton<UpdateUserUseCase>(
+        UpdateUserUseCase(userRepository: serviceLocator.get<UserRepository>()),
       );
   }
 }

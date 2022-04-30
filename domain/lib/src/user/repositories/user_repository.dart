@@ -6,4 +6,6 @@ abstract class UserRepository {
   Future<List<User>> getUsers();
 
   Future<void> deleteUserByID({required int userId});
+
+  Future<void> updateUser({required User user});
 }

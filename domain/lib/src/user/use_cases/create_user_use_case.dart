@@ -1,10 +1,10 @@
 import '../entities/user.dart';
 import '../repositories/user_repository.dart';
 
-class AddUserUseCase {
+class CreateUserUseCase {
   final UserRepository _userRepository;
 
-  const AddUserUseCase({required UserRepository userRepository})
+  const CreateUserUseCase({required UserRepository userRepository})
       : _userRepository = userRepository;
 
   Future<void> execute({required User user}) async {
